@@ -1,5 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { firestore } from "../firebaseConfig";
+import { useNavigate } from 'react-router-dom';
+// import UserPage from "./UserPage"
+// import OtherPage from "./OtherPage"
+import "../styles.css";
 import {
   addDoc,
   collection,
@@ -8,7 +12,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import "../styles.css";
+
 const Login = () => {
   const [login, setLogin] = useState(true);
   const [name, setName] = useState("");
@@ -17,7 +21,27 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [data, setData] = useState({});
   const [errmsg, setErrmsg] = useState("");
+  const [role, setRole]=useState("Select a role");
   const ref = collection(firestore, "users");
+  const navigate = useNavigate();
+
+
+  const [users, setUsers] = useState([]);
+
+  // Function to fetch users from Firestore
+  const fetchUsers = async () => {
+    const querySnapshot = await getDocs(collection(firestore, 'users'));
+    const usersData = querySnapshot.docs.map((doc) => doc.data());
+    setUsers(usersData);
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const handleDropdownChange = (event) => {
+    setRole(event.target.value);
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -41,6 +65,14 @@ const Login = () => {
       console.log(e);
       setErrmsg(e);
     }
+
+    if(role==="2"){
+navigate("/user");
+    }
+    else if(role==="3")
+    {
+      navigate("/other");
+    }
   };
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -49,6 +81,7 @@ const Login = () => {
       lname: lname,
       email: email,
       password: password,
+      role:role,
     };
     try {
       addDoc(ref, data);
@@ -57,6 +90,7 @@ const Login = () => {
     }
   };
   return (
+    
     <div style={{ textAlign: "center" }}>
       <div
         style={{
@@ -66,6 +100,7 @@ const Login = () => {
         }}
       >
         {login && (
+           <div class="form-cont">
           <form onSubmit={handleLogin}>
             <p className="form-title">LOGIN</p>
             <div className="form">
@@ -86,6 +121,7 @@ const Login = () => {
               <button type="submit">Submit</button>
             </div>
           </form>
+          </div>
         )}
       </div>
       <div
@@ -96,6 +132,7 @@ const Login = () => {
         }}
       >
         {!login && (
+          <div class="form-cont">
           <form onSubmit={handleSignup}>
             <p className="form-title">SIGNUP</p>
             <div className="form">
@@ -112,6 +149,13 @@ const Login = () => {
                 value={lname}
                 onChange={(e) => setLname(e.target.value)}
               />
+               <br />
+                <select value={role} onChange={handleDropdownChange}>
+                          <option value="select a role">Select a Role</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                </select>
+
               <br />
               <label>Enter email: </label>
               <input
@@ -126,9 +170,11 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+                 <br />
               <button type="submit">Submit</button>
             </div>
           </form>
+          </div>
         )}
       </div>
 
@@ -142,7 +188,24 @@ const Login = () => {
             : "Already a user? Click here to log in"}
         </p>
       </div>
+
+      <div>
+        <h2>User List</h2>
+        <ul>
+          {users.map((user, index) => (
+            <li key={index}>
+              {/* Display user information here */}
+              <p>Name: {user.name}</p>
+              <p>Email: {user.email}</p>
+              <p>Roll:{user.role}</p>
+              {/* ... (any other user information you want to display) */}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
+    
+  
   );
 };
 

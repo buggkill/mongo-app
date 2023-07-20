@@ -1,10 +1,38 @@
+
+.form-cont{
+  width:30%;
+margin:auto;
+background-color: #693cac;
+border-radius: 5px;
+border: 1px solid;
+}
 .form {
-  background-color: #ffe2e2;
-  width: 200px;
-  border-radius: 5px;
-  border: solid;
+  margin:auto;
+  width: 400px;
+  height:400px;
+
 }
 .form-title {
   font-size: 20px;
   font-weight: bold;
+}
+label{
+  margin-top:10px;
+  float:left;
+}
+input{
+  margin-top:10px; 
+  border-radius: 3px;
+
+}
+select{
+  margin-top:10px;
+  margin-right:300px;
+}
+button{
+  margin-top:25px;
+  background-color: #000;
+  color:#fff;
+  width:100px;
+  font-weight: 200;
 }
