@@ -23,7 +23,7 @@ const Login = () => {
   const [errmsg, setErrmsg] = useState("");
   const [role, setRole]=useState("Select a role");
   const ref = collection(firestore, "users");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
 
   const [users, setUsers] = useState([]);
@@ -66,13 +66,13 @@ const Login = () => {
       setErrmsg(e);
     }
 
-    if(role==="2"){
-navigate("/user");
-    }
-    else if(role==="3")
-    {
-      navigate("/other");
-    }
+//     if(role==="2"){
+// navigate("/user");
+//     }
+//     else if(role==="3")
+//     {
+//       navigate("/other");
+//     }
   };
   const handleSignup = async (e) => {
     e.preventDefault();
